@@ -116,5 +116,5 @@ variable "docker_image_url_nginx" {
 # allowed host
 variable "allowed_hosts" {
   description = "Domain name for allowed hosts"
-  default     = "*.thevizironline.com"
+  default     = ".thevizironline.com .amazonaws.com. .amazonaws.com"
 }
