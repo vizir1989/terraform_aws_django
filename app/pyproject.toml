@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "terraform-aws-django"
+version = "0.1.0"
+description = ""
+authors = ["Ninchuk Vladislav"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.1.7"
+gunicorn = "^20.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
