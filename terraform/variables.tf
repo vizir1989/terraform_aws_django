@@ -4,12 +4,13 @@ variable "region" {
 }
 
 # networking
+
 variable "public_subnet_1_cidr" {
   description = "CIDR Block for Public Subnet 1"
   default     = "10.0.1.0/24"
 }
 variable "public_subnet_2_cidr" {
-  description = "CIDR Block for Public Subnet 1"
+  description = "CIDR Block for Public Subnet 2"
   default     = "10.0.2.0/24"
 }
 variable "private_subnet_1_cidr" {
@@ -17,13 +18,13 @@ variable "private_subnet_1_cidr" {
   default     = "10.0.3.0/24"
 }
 variable "private_subnet_2_cidr" {
-  description = "CIDR Block for Private Subnet 1"
+  description = "CIDR Block for Private Subnet 2"
   default     = "10.0.4.0/24"
 }
 variable "availability_zones" {
   description = "Availability zones"
-  type = list(string)
-  default = ["us-west-1a", "us-west-1b"]
+  type        = list(string)
+  default     = ["us-west-1a", "us-west-1b"]
 }
 
 # load balancer
@@ -63,7 +64,7 @@ variable "log_retention_in_days" {
 # key pair
 variable "ssh_pubkey_file" {
   description = "Path to an SSH public key"
-  default = "~/.ssh/id_rsa.pub"
+  default = "~/.ssh/aws.pub"
 }
 
 # auto scaling
@@ -79,4 +80,22 @@ variable "autoscale_max" {
 variable "autoscale_desired" {
   description = "Desired autoscale (number of EC2)"
   default     = "4"
+}
+
+# rds
+variable "rds_db_name" {
+  description = "RDS database name"
+  default     = "mydb"
+}
+variable "rds_username" {
+  description = "RDS database username"
+  default     = "foo"
+}
+variable "rds_password" {
+  description = "RDS database password"
+  default = "vizir1989" # TODO: delete it and move to AWS Secrets Manager.
+}
+variable "rds_instance_class" {
+  description = "RDS instance type"
+  default     = "db.t3.micro"
 }

@@ -14,6 +14,11 @@ RUN chgrp -R 0 /var/log && \
     python -m pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir poetry==${POETRY_VERSION}
 
+# install psycopg2 dependencies
+RUN apt-get update \
+  && apt-get -y install gcc postgresql \
+  && apt-get clean
+
 COPY ./app/pyproject.toml ./app/poetry.lock /code/
 
 RUN poetry config virtualenvs.create false \
@@ -21,4 +26,5 @@ RUN poetry config virtualenvs.create false \
     && mkdir -p /var/log && chown -R 1777 /var/log
 
 COPY ./app /code
-ENTRYPOINT bash -c "gunicorn terraform_aws_django.wsgi:application --bind 0.0.0.0:8000"
+# ENTRYPOINT bash -c "while :; do echo 'Hit CTRL+C'; sleep 1; done"
+# ENTRYPOINT bash -c "gunicorn terraform_aws_django.wsgi:application --bind 0.0.0.0:8000"

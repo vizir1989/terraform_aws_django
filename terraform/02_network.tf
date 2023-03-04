@@ -7,25 +7,25 @@ resource "aws_vpc" "production-vpc" {
 
 # Public subnets
 resource "aws_subnet" "public-subnet-1" {
-  vpc_id            = aws_vpc.production-vpc.id
   cidr_block        = var.public_subnet_1_cidr
+  vpc_id            = aws_vpc.production-vpc.id
   availability_zone = var.availability_zones[0]
 }
 resource "aws_subnet" "public-subnet-2" {
-  vpc_id            = aws_vpc.production-vpc.id
   cidr_block        = var.public_subnet_2_cidr
+  vpc_id            = aws_vpc.production-vpc.id
   availability_zone = var.availability_zones[1]
 }
 
 # Private subnets
 resource "aws_subnet" "private-subnet-1" {
-  vpc_id            = aws_vpc.production-vpc.id
   cidr_block        = var.private_subnet_1_cidr
+  vpc_id            = aws_vpc.production-vpc.id
   availability_zone = var.availability_zones[0]
 }
 resource "aws_subnet" "private-subnet-2" {
-  vpc_id            = aws_vpc.production-vpc.id
   cidr_block        = var.private_subnet_2_cidr
+  vpc_id            = aws_vpc.production-vpc.id
   availability_zone = var.availability_zones[1]
 }
 
@@ -62,12 +62,16 @@ resource "aws_eip" "elastic-ip-for-nat-gw" {
   depends_on                = [aws_internet_gateway.production-igw]
 }
 
-
 # NAT gateway
 resource "aws_nat_gateway" "nat-gw" {
-  subnet_id     = aws_subnet.public-subnet-1.id
   allocation_id = aws_eip.elastic-ip-for-nat-gw.id
+  subnet_id     = aws_subnet.public-subnet-1.id
   depends_on    = [aws_eip.elastic-ip-for-nat-gw]
+}
+resource "aws_route" "nat-gw-route" {
+  route_table_id         = aws_route_table.private-route-table.id
+  nat_gateway_id         = aws_nat_gateway.nat-gw.id
+  destination_cidr_block = "0.0.0.0/0"
 }
 
 # Internet Gateway for the public subnet
