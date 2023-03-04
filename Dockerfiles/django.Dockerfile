@@ -1,4 +1,4 @@
-FROM python:3.10-slim as base
+FROM python:3.10.0-slim-buster
 
 ARG POETRY_VERSION=1.4.0
 
@@ -26,5 +26,7 @@ RUN poetry config virtualenvs.create false \
     && mkdir -p /var/log && chown -R 1777 /var/log
 
 COPY ./app /code
+
+RUN python manage.py collectstatic --no-input
 # ENTRYPOINT bash -c "while :; do echo 'Hit CTRL+C'; sleep 1; done"
 # ENTRYPOINT bash -c "gunicorn terraform_aws_django.wsgi:application --bind 0.0.0.0:8000"

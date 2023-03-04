@@ -99,3 +99,22 @@ variable "rds_instance_class" {
   description = "RDS instance type"
   default     = "db.t3.micro"
 }
+
+# domain
+# TODO: added certificate late
+variable "certificate_arn" {
+  description = "AWS Certificate Manager ARN for validated domain"
+  default     = "ADD YOUR ARN HERE"
+}
+
+# nginx
+variable "docker_image_url_nginx" {
+  description = "Docker image to run in the ECS cluster"
+  default     = "174819378488.dkr.ecr.us-west-1.amazonaws.com/nginx:latest"
+}
+
+# allowed host
+variable "allowed_hosts" {
+  description = "Domain name for allowed hosts"
+  default     = "*.thevizironline.com"
+}

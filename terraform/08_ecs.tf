@@ -18,11 +18,13 @@ data "template_file" "app" {
 
   vars = {
     docker_image_url_django = var.docker_image_url_django
+    docker_image_url_nginx  = var.docker_image_url_nginx
     region                  = var.region
     rds_db_name             = var.rds_db_name
     rds_username            = var.rds_username
     rds_password            = var.rds_password
     rds_hostname            = aws_db_instance.production.address
+    allowed_hosts           = var.allowed_hosts
   }
 }
 
@@ -30,6 +32,11 @@ resource "aws_ecs_task_definition" "app" {
   family                = "terraform_aws_django"
   container_definitions = data.template_file.app.rendered
   depends_on            = [aws_db_instance.production]
+
+  volume {
+    name      = "static_volume"
+    host_path = "/code/staticfiles/"
+  }
 }
 
 resource "aws_ecs_service" "production" {
@@ -42,7 +49,7 @@ resource "aws_ecs_service" "production" {
 
   load_balancer {
     target_group_arn = aws_alb_target_group.default-target-group.arn
-    container_name   = "terraform_aws_django"
-    container_port   = 8000
+    container_name   = "nginx"
+    container_port   = 80
   }
 }

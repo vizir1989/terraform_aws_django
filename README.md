@@ -1,0 +1,1 @@
+Based on [deploying-django-to-ecs-with-terraform](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform)
