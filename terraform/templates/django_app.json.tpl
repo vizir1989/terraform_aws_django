@@ -40,12 +40,6 @@
         "value": "${allowed_hosts}"
       }
     ],
-    "mountPoints": [
-      {
-        "containerPath": "/code/staticfiles",
-        "sourceVolume": "static_volume"
-      }
-    ],
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
@@ -67,12 +61,6 @@
         "containerPort": 80,
         "hostPort": 0,
         "protocol": "tcp"
-      }
-    ],
-    "mountPoints": [
-      {
-        "containerPath": "/code/staticfiles",
-        "sourceVolume": "static_volume"
       }
     ],
     "logConfiguration": {

@@ -32,11 +32,6 @@ resource "aws_ecs_task_definition" "app" {
   family                = "terraform_aws_django"
   container_definitions = data.template_file.app.rendered
   depends_on            = [aws_db_instance.production]
-
-  volume {
-    name      = "static_volume"
-    host_path = "/code/staticfiles/"
-  }
 }
 
 resource "aws_ecs_service" "production" {
