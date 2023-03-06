@@ -7,3 +7,5 @@ TODO:
 2. added certificate (433 port) ([see](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/#domain-and-ssl-certificate))
 3. added github ci/cd
 4. added different branch - different sites
+5. added AWS Secret Manager for saving Django [security key](https://www.prplbx.com/resources/blog/django-part2/)
+6. added s3 as backend for terraform
