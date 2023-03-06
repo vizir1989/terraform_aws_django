@@ -96,7 +96,7 @@ variable "rds_instance_class" {
 # TODO: added certificate late
 variable "certificate_arn" {
   description = "AWS Certificate Manager ARN for validated domain"
-  default     = "ADD YOUR ARN HERE"
+  default     = "arn:aws:acm:us-west-1:174819378488:certificate/51b066d0-488f-4a90-a3de-40c350711f07"
 }
 
 # nginx
