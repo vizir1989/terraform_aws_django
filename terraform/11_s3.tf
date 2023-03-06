@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "bucket" {
   bucket = "${var.ecs_cluster_name}-terraformaws-aws-django"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {
