@@ -20,12 +20,12 @@
         "value": "${rds_db_name}"
       },
       {
-        "name": "RDS_USERNAME",
-        "value": "${rds_username}"
+        "name": "RDS_PASSWORD_KMS_ID",
+        "value": "${rds_password_kms_id}"
       },
       {
-        "name": "RDS_PASSWORD",
-        "value": "${rds_password}"
+        "name": "AWS_DEFAULT_REGION",
+        "value": "${region}"
       },
       {
         "name": "RDS_HOSTNAME",

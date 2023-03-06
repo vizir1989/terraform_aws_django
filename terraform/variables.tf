@@ -87,14 +87,6 @@ variable "rds_db_name" {
   description = "RDS database name"
   default     = "mydb"
 }
-variable "rds_username" {
-  description = "RDS database username"
-  default     = "foo"
-}
-variable "rds_password" {
-  description = "RDS database password"
-  default = "vizir1989" # TODO: delete it and move to AWS Secrets Manager.
-}
 variable "rds_instance_class" {
   description = "RDS instance type"
   default     = "db.t3.micro"
@@ -116,5 +108,5 @@ variable "docker_image_url_nginx" {
 # allowed host
 variable "allowed_hosts" {
   description = "Domain name for allowed hosts"
-  default     = ".thevizironline.com .amazonaws.com. .amazonaws.com"
+  default     = ".thevizironline.com .amazonaws.com"
 }

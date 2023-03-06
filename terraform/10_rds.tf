@@ -6,8 +6,8 @@ resource "aws_db_subnet_group" "production" {
 resource "aws_db_instance" "production" {
   identifier              = "production"
   db_name                 = var.rds_db_name
-  username                = var.rds_username
-  password                = var.rds_password
+  username                = local.db_creds.username
+  password                = local.db_creds.password
   port                    = "5432"
   engine                  = "postgres"
   engine_version          = "15.2"

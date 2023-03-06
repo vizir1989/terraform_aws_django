@@ -19,10 +19,9 @@ data "template_file" "app" {
   vars = {
     docker_image_url_django = var.docker_image_url_django
     docker_image_url_nginx  = var.docker_image_url_nginx
-    region                  = var.region
+    region                  = data.aws_region.current.name
     rds_db_name             = var.rds_db_name
-    rds_username            = var.rds_username
-    rds_password            = var.rds_password
+    rds_password_kms_id     = aws_secretsmanager_secret.secret_master_db.id
     rds_hostname            = aws_db_instance.production.address
     allowed_hosts           = var.allowed_hosts
     bucket_name             = aws_s3_bucket.bucket.bucket
