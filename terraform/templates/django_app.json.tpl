@@ -13,7 +13,7 @@
         "protocol": "tcp"
       }
     ],
-    "command": ["gunicorn", "-w", "3", "-b", ":8000", "terraform_aws_django.wsgi:application"],
+    "command": ["./scripts/run_server.sh"],
     "environment": [
       {
         "name": "RDS_DB_NAME",
@@ -38,6 +38,10 @@
       {
         "name": "ALLOWED_HOSTS",
         "value": "${allowed_hosts}"
+      },
+      {
+        "name": "AWS_STORAGE_BUCKET_NAME",
+        "value": "${bucket_name}"
       }
     ],
     "logConfiguration": {

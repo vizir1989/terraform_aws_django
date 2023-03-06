@@ -25,6 +25,7 @@ data "template_file" "app" {
     rds_password            = var.rds_password
     rds_hostname            = aws_db_instance.production.address
     allowed_hosts           = var.allowed_hosts
+    bucket_name             = aws_s3_bucket.bucket.bucket
   }
 }
 

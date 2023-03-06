@@ -26,7 +26,6 @@ RUN poetry config virtualenvs.create false \
     && mkdir -p /var/log && chown -R 1777 /var/log
 
 COPY ./app /usr/src/app
-
-COPY ./staticfiles ./staticfiles
+RUN chmod +x ./scripts/run_server.sh
 # ENTRYPOINT bash -c "while :; do echo 'Hit CTRL+C'; sleep 1; done"
 # ENTRYPOINT bash -c "gunicorn terraform_aws_django.wsgi:application --bind 0.0.0.0:8000"
