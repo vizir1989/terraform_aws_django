@@ -17,7 +17,7 @@ jobs:
 
       - name: Setup login password
         id: setup_login_password
-        run: aws ecr get-login-password --region us-west-1 >> $AWS_PASSWORD
+        run: echo "AWS_PASSWORD=$(aws ecr get-login-password --region us-west-1)" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3.3.0
