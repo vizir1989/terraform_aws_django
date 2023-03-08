@@ -3,6 +3,20 @@ variable "region" {
   default     = "us-west-1"
 }
 
+variable "region_replica" {
+  description = "The AWS region replica to create resources in."
+  default     = "us-east-1"
+}
+
+# tf backend
+variable "tf_backend_bucket_name" {
+  default = "terraform_aws_django_state"
+}
+
+variable "tf_backend_bucket_path" {
+  default = "state/terraform.tfstate"
+}
+
 # networking
 
 variable "public_subnet_1_cidr" {
