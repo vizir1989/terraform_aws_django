@@ -21,11 +21,9 @@ terraform {
     aws = {
       version = "~> 4.57.0"
     }
-
     random = {
       version = "~> 3.4.3"
     }
-    
     template = {
       version = "~> 2.2.0"
     }
