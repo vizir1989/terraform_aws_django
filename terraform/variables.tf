@@ -18,7 +18,6 @@ variable "tf_backend_bucket_path" {
 }
 
 # networking
-
 variable "public_subnet_1_cidr" {
   description = "CIDR Block for Public Subnet 1"
   default     = "10.0.1.0/24"
@@ -127,10 +126,10 @@ variable "allowed_hosts" {
 # route53
 variable "hosted_zone" {
   description = "Hosted zone"
-  default = "thevizironline.com"
+  default     = "thevizironline.com"
 }
 
 variable "subdomain" {
   description = "Subdomain for elb"
-  default = "django"
+  default     = "django"
 }
