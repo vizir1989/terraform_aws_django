@@ -4,7 +4,7 @@ resource "random_password" "rds_password" {
 }
 
 resource "aws_secretsmanager_secret" "secret_master_db" {
-  name = "${var.ecs_cluster_name}_rds_password"
+  name = var.secret_id
 }
 
 resource "aws_secretsmanager_secret_version" "sversion" {

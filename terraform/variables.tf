@@ -53,8 +53,16 @@ variable "ecs_cluster_name" {
 }
 variable "amis" {
   description = "Which AMI to spawn."
-  default = {
-    us-west-1 = "ami-0bd3976c0dbacc605"
+  default     = {
+    us-west-1    = "ami-0bd3976c0dbacc605"
+    us-west-2    = "ami-04e6179c63d17513d"
+    us-east-1    = "ami-0fe19057e9cb4efd8"
+    us-east-2    = "ami-086e001f1a73d208c"
+    eu-central-1 = "ami-0e8f6957a4eb67446"
+    eu-west-1    = "ami-02c55114d1d2a8201"
+    eu-west-2    = "ami-02a7ca2a9d03676bf"
+    eu-west-3    = "ami-0bce8e5f8fd912af2"
+    eu-north-1   = "ami-0f541966b45340fce"
   }
 }
 variable "instance_type" {
@@ -62,7 +70,6 @@ variable "instance_type" {
 }
 variable "docker_image_url_django" {
   description = "Docker image to run in the ECS cluster"
-  default     = "174819378488.dkr.ecr.us-west-1.amazonaws.com/terraform_aws_django:latest"
 }
 variable "app_count" {
   description = "Number of Docker containers to run"
@@ -108,13 +115,11 @@ variable "rds_instance_class" {
 # domain
 variable "certificate_arn" {
   description = "AWS Certificate Manager ARN for validated domain"
-  default     = "arn:aws:acm:us-west-1:174819378488:certificate/609e8c8a-f2a4-419b-8af9-20ce0e6afa87"
 }
 
 # nginx
 variable "docker_image_url_nginx" {
   description = "Docker image to run in the ECS cluster"
-  default     = "174819378488.dkr.ecr.us-west-1.amazonaws.com/nginx:latest"
 }
 
 # allowed host
@@ -132,4 +137,9 @@ variable "hosted_zone" {
 variable "subdomain" {
   description = "Subdomain for elb"
   default     = "django"
+}
+
+# secret manager
+variable "secret_id" {
+  description = "Secret manager ID"
 }
