@@ -192,7 +192,7 @@ jobs:
         run: cd ./terraform && terraform init
 
       - name: Sleep for 45 minutes
-        run: sleep 2700s
+        run: sleep ${{ vars.DELETION_DELAY }}
         shell: bash
 
       - name: Terraform delete
