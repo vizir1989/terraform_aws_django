@@ -17,6 +17,20 @@ resource "aws_iam_user_policy_attachment" "remote_state_access" {
 }
 
 terraform {
+  required_providers {
+    aws = {
+      version = "~> 4.57.0"
+    }
+
+    random = {
+      version = "~> 3.4.3"
+    }
+    
+    template = {
+      version = "~> 2.2.0"
+    }
+  }
+
   backend "s3" {
     bucket         = "vizir-terraform-state"
     key            = "terraform.tfstate"
