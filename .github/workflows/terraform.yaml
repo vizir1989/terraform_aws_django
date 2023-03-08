@@ -129,7 +129,7 @@ jobs:
           TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:latest
           TF_VAR_certificate_arn: ${{ secrets.AWS_CERTIFICATE_ARN }}
           TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:latest
-          TF_VAR_secret_id: $${{ vars.AWS_SECRET_ID }}
+          TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
         run: cd ./terraform && terraform apply -auto-approve -input=false
 
       - name: Install python
