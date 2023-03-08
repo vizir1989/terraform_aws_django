@@ -73,4 +73,4 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: cd ./terraform && terraform apply -auto-approve -input=false
+        run: cd ./terraform && terraform apply -auto-approve -input=false  -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
