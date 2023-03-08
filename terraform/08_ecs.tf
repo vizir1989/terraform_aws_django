@@ -40,7 +40,7 @@ resource "aws_ecs_service" "production" {
   task_definition = aws_ecs_task_definition.app.arn
   iam_role        = aws_iam_role.ecs-service-role.arn
   desired_count   = var.app_count
-  depends_on      = [aws_alb_listener.ecs-alb-http-listener, aws_iam_role_policy.ecs-service-role-policy]
+  depends_on      = [aws_alb_listener.ecs-alb-https-listener, aws_iam_role_policy.ecs-service-role-policy]
 
   load_balancer {
     target_group_arn = aws_alb_target_group.default-target-group.arn

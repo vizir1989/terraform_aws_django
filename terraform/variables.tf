@@ -109,7 +109,7 @@ variable "rds_instance_class" {
 # domain
 variable "certificate_arn" {
   description = "AWS Certificate Manager ARN for validated domain"
-  default     = "arn:aws:acm:us-west-1:174819378488:certificate/05499881-0e26-4d66-9e68-42f48ad7a9a2"
+  default     = "arn:aws:acm:us-west-1:174819378488:certificate/609e8c8a-f2a4-419b-8af9-20ce0e6afa87"
 }
 
 # nginx
