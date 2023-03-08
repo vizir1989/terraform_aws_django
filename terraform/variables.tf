@@ -44,13 +44,13 @@ variable "availability_zones" {
 # load balancer
 variable "health_check_path" {
   description = "Health check path for the default target group"
-  default = "/ping/"
+  default     = "/ping/"
 }
 
 # ecs
 variable "ecs_cluster_name" {
   description = "Name of the ECS cluster"
-  default = "production"
+  default     = "production"
 }
 variable "amis" {
   description = "Which AMI to spawn."
@@ -78,7 +78,7 @@ variable "log_retention_in_days" {
 # key pair
 variable "ssh_pubkey_file" {
   description = "Path to an SSH public key"
-  default = "~/.ssh/aws.pub"
+  default     = "~/.ssh/aws.pub"
 }
 
 # auto scaling
