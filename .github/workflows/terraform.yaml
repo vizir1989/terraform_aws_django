@@ -163,11 +163,11 @@ jobs:
         run: cd ./terraform && terraform init
 
       - name: Sleep for 45 minutes
+        if: needs.terraform.status == "success"
         run: sleep 2700s
         shell: bash
 
       - name: Terraform delete
-        if: steps.apply.outcome != 'failure'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
