@@ -123,3 +123,14 @@ variable "allowed_hosts" {
   description = "Domain name for allowed hosts"
   default     = ".thevizironline.com .amazonaws.com"
 }
+
+# route53
+variable "hosted_zone" {
+  description = "Hosted zone"
+  default = "thevizironline.com"
+}
+
+variable "subdomain" {
+  description = "Subdomain for elb"
+  default = "django"
+}
