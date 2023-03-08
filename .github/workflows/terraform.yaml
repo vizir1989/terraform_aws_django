@@ -13,13 +13,6 @@ jobs:
     name: "Docker"
     runs-on: ubuntu-latest
     steps:
-      - name: Install AWS CLI
-        id: install-aws-cli
-        uses: unfor19/install-aws-cli-action@master
-
-      - name: Setup login password
-        id: setup_login_password
-        run: echo "AWS_PASSWORD=$(aws ecr get-login-password --region us-west-1)" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3.3.0
@@ -39,7 +32,7 @@ jobs:
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Build and push
+      - name: Build and push Djnago
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -47,7 +40,7 @@ jobs:
           push: true
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-1.amazonaws.com/terraform_aws_django:latest
 
-      - name: Build and push
+      - name: Build and push Nginx
         uses: docker/build-push-action@v4
         with:
           context: .
