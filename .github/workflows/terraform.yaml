@@ -175,6 +175,7 @@ jobs:
 
       # TODO: use secret_id and region from env
       - name: Delete aws secret
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: aws secretsmanager delete-secret --secret-id production_rds_password --force-delete-without-recovery --region us-west-1
