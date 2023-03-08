@@ -1,7 +1,7 @@
 resource "random_password" "rds_password" {
   length           = 16
   special          = true
-  override_special = "/%@"
+  override_special = "/@"
 }
 
 resource "aws_secretsmanager_secret" "secret_master_db" {
