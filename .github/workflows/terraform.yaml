@@ -1,4 +1,4 @@
-# TODO: use secret_id and region from env
+# TODO: use secret_id
 
 name: "Terraform"
 
@@ -128,13 +128,22 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: cd ./terraform && terraform apply -auto-approve -input=false
-#
-#      - name: Update docker images
-#        id: update_docker
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        run: python update-ecs.py --cluster=production-cluster --service=production-service
+
+      - name: Update docker images
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: update_docker
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: python update-ecs.py --cluster=production-cluster --service=production-service
+
+    - name: Terraform Update Docker Images
+      id: update_docker_images
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: cd ./terraform && terraform apply -auto-approve -input=false
 
   clean:
     name: "Clean Terraform"
@@ -170,7 +179,6 @@ jobs:
         run: cd ./terraform && terraform init
 
       - name: Sleep for 45 minutes
-        if: needs.terraform.status == 'success'
         run: sleep 2700s
         shell: bash
 
