@@ -189,7 +189,7 @@ jobs:
         run: cd ./terraform && terraform init
 
       - name: Sleep for 45 minutes
-        run: sleep 30s
+        run: sleep 2700s
         shell: bash
 
       - name: Terraform delete
