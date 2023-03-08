@@ -18,6 +18,10 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
 
+      - name: Create AWS_PUB_KEY
+        id: aws_pub_key
+        run: mkdir -p ~/.ssh/ && echo "${{ secrets.AWS_PUB_KEY }}" > ~/.ssh/aws.pub
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
