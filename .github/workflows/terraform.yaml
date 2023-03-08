@@ -163,7 +163,7 @@ jobs:
         run: cd ./terraform && terraform init
 
       - name: Sleep for 45 minutes
-        if: needs.terraform.status == "success"
+        if: needs.terraform.status == 'success'
         run: sleep 2700s
         shell: bash
 
