@@ -16,6 +16,18 @@
     "command": ["./scripts/run_server.sh"],
     "environment": [
       {
+        "name": "DJANGO_SUPERUSER_PASSWORD",
+        "value": "${django_superuser_password}"
+      },
+      {
+        "name": "DJANGO_SUPERUSER_USERNAME",
+        "value": "admin"
+      },
+      {
+        "name": "DJANGO_SUPERUSER_EMAIL",
+        "value": "admin"
+      },
+      {
         "name": "RDS_DB_NAME",
         "value": "${rds_db_name}"
       },
