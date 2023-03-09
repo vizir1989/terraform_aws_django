@@ -25,7 +25,7 @@
       },
       {
         "name": "DJANGO_SUPERUSER_EMAIL",
-        "value": ""
+        "value": "test@test.com"
       },
       {
         "name": "RDS_DB_NAME",
