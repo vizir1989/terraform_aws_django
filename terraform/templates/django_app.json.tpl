@@ -62,7 +62,7 @@
     "links": ["terraform_aws_django"],
     "portMappings": [
       {
-        "containerPort": 80,
+        "containerPort": 443,
         "hostPort": 0,
         "protocol": "tcp"
       }
