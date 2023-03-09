@@ -3,5 +3,5 @@ output "alb_hostname" {
 }
 
 output "hostname" {
-  value = aws_route53_record.django.name
+  value = "https://${aws_route53_record.django.name}/admin"
 }

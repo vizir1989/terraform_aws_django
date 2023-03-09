@@ -103,10 +103,6 @@ variable "autoscale_desired" {
 }
 
 # rds
-variable "rds_db_name" {
-  description = "RDS database name"
-  default     = "mydb"
-}
 variable "rds_instance_class" {
   description = "RDS instance type"
   default     = "db.t3.micro"

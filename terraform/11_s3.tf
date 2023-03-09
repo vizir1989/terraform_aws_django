@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket        = "${var.ecs_cluster_name}-terraformaws-aws-django"
+  bucket        = "${terraform.workspace}-terraformaws-aws-django"
   force_destroy = true
 }
 
@@ -30,7 +30,7 @@ resource "aws_s3_bucket_policy" "prod_website" {
             "Effect": "Allow",
             "Principal": "*",
             "Action": [
-               "s3:GetObject"
+               "s3:*"
             ],
             "Resource": [
                "arn:aws:s3:::${aws_s3_bucket.bucket.id}/*"

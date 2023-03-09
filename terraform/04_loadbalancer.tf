@@ -1,16 +1,22 @@
 # Production Load Balancer
 
 resource "aws_lb" "production" {
-  name               = "${var.ecs_cluster_name}-alb"
+  name               = "${terraform.workspace}-alb"
   load_balancer_type = "application"
   internal           = false
   security_groups    = [aws_security_group.load-balancer.id]
   subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
+
+  access_logs {
+    bucket  = aws_s3_bucket.bucket.id
+    prefix  = "aws_lb"
+    enabled = true
+  }
 }
 
 # Target group
 resource "aws_alb_target_group" "default-target-group" {
-  name     = "${var.ecs_cluster_name}-tg"
+  name     = "${terraform.workspace}-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.production-vpc.id

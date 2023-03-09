@@ -1,4 +1,3 @@
-# TODO: use secret_id
 name: "Terraform"
 
 on:
@@ -37,7 +36,7 @@ jobs:
           context: .
           file: ./Dockerfiles/django.Dockerfile
           push: true
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:latest
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:$TERRAFORM_WORKSPACE
 
       - name: Build and push Nginx
         uses: docker/build-push-action@v4
@@ -45,7 +44,7 @@ jobs:
           context: .
           file: ./Dockerfiles/nginx.Dockerfile
           push: true
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:latest
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:$TERRAFORM_WORKSPACE
 
   terraform:
     name: "Terraform"
@@ -58,9 +57,9 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
       TF_VAR_region: ${{ vars.AWS_DEFAULT_REGION }}
-      TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:latest
+      TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:$TERRAFORM_WORKSPACE
       TF_VAR_certificate_arn: ${{ secrets.AWS_CERTIFICATE_ARN }}
-      TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:latest
+      TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:$TERRAFORM_WORKSPACE
       TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
     steps:
       - name: Checkout
@@ -79,13 +78,30 @@ jobs:
         id: fmt
         run: cd ./terraform && terraform fmt -check
 
-      - name: Terraform get
-        id: get
-        run: cd ./terraform && terraform get
-
       - name: Terraform Init
         id: init
-        run: cd ./terraform && terraform init
+        run: cd ./terraform && terraform init && terraform providers lock -platform=darwin_arm64
+
+
+      - name: Set Terraform Workspace
+        id: workspace_main
+        if: github.ref == 'refs/heads/main'
+        run: echo "TERRAFORM_WORKSPACE=prod" >> $GITHUB_ENV
+
+      - name: Set Terraform Workspace
+        id: workspace_stage
+        if: github.ref == 'refs/heads/stage'
+        run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
+
+      - name: Set Terraform Workspace
+        id: workspace_dev
+        if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
+        run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
+
+      - name: Create Terraform Workspace
+        id: workspace
+        if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
+        run: cd ./terraform && terraform workspace new $TERRAFORM_WORKSPACE && terraform workspace select $TERRAFORM_WORKSPACE
 
       - name: Terraform Validate
         id: validate
@@ -142,7 +158,7 @@ jobs:
       - name: Update docker images
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         id: update_docker
-        run: cd ./deploy && python update-ecs.py --cluster=production-cluster --service=production-service
+        run: cd ./deploy && python update-ecs.py --cluster="$TERRAFORM_WORKSPACE-cluster" --service="$TERRAFORM_WORKSPACE-service"
 
       - name: Terraform Update Docker Images
         id: update_docker_images
@@ -153,6 +169,10 @@ jobs:
     name: "Clean Terraform"
     runs-on: ubuntu-latest
     needs: terraform
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
     if: ${{ always() }}
     steps:
       - name: Checkout
@@ -171,29 +191,36 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform get
-        id: get
-        run: cd ./terraform && terraform get
-
       - name: Terraform Init
         id: init
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: cd ./terraform && terraform init
+        run: cd ./terraform && terraform init && terraform providers lock -platform=darwin_arm64
+
+      - name: Set Terraform Workspace
+        id: workspace_main
+        if: github.ref == 'refs/heads/main'
+        run: echo "TERRAFORM_WORKSPACE=prod" >> $GITHUB_ENV
+
+      - name: Set Terraform Workspace
+        id: workspace_stage
+        if: github.ref == 'refs/heads/stage'
+        run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
+
+      - name: Set Terraform Workspace
+        id: workspace_dev
+        if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
+        run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
+
+      - name: Create Terraform Workspace
+        id: workspace
+        if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
+        run: cd ./terraform && terraform workspace new $TERRAFORM_WORKSPACE && terraform workspace select $TERRAFORM_WORKSPACE
 
       - name: Sleep for 45 minutes
         run: sleep ${{ vars.DELETION_DELAY }}
         shell: bash
 
       - name: Terraform delete
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: cd ./terraform && terraform destroy -auto-approve -input=false
 
       - name: Delete aws secret
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: aws secretsmanager delete-secret --secret-id ${{ vars.AWS_SECRET_ID }} --force-delete-without-recovery --region ${{ vars.AWS_DEFAULT_REGION }}
+        run: aws secretsmanager delete-secret --secret-id $TERRAFORM_WORKSPACE-${{ vars.AWS_SECRET_ID }} --force-delete-without-recovery --region ${{ vars.AWS_DEFAULT_REGION }}

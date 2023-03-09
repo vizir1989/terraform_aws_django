@@ -1,19 +1,19 @@
 resource "aws_cloudwatch_log_group" "django-log-group" {
-  name              = "/ecs/django-app"
+  name              = "/ecs/django-app-${terraform.workspace}"
   retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_stream" "django-log-stream" {
-  name           = "django-app-log-stream"
+  name           = "django-app-log-stream-${terraform.workspace}"
   log_group_name = aws_cloudwatch_log_group.django-log-group.name
 }
 
 resource "aws_cloudwatch_log_group" "nginx-log-group" {
-  name              = "/ecs/nginx"
+  name              = "/ecs/nginx-${terraform.workspace}"
   retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_cloudwatch_log_stream" "nginx-log-stream" {
-  name           = "nginx-log-stream"
+  name           = "nginx-log-stream-${terraform.workspace}"
   log_group_name = aws_cloudwatch_log_group.nginx-log-group.name
 }

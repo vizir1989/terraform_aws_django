@@ -1,6 +1,6 @@
 # ALB Security Group (Traffic Internet -> ALB)
 resource "aws_security_group" "load-balancer" {
-  name        = "load_balancer_security_group"
+  name        = "${terraform.workspace}_load_balancer_security_group"
   description = "Controls access to the ALB"
   vpc_id      = aws_vpc.production-vpc.id
 
@@ -28,7 +28,7 @@ resource "aws_security_group" "load-balancer" {
 
 # ECS Security group (traffic ALB -> ECS, ssh -> ECS)
 resource "aws_security_group" "ecs" {
-  name        = "ecs_security_group"
+  name        = "${terraform.workspace}_ecs_security_group"
   description = "Allows inbound access from the ALB only"
   vpc_id      = aws_vpc.production-vpc.id
 
@@ -56,7 +56,7 @@ resource "aws_security_group" "ecs" {
 
 # RDS Security Group (traffic ECS -> RDS)
 resource "aws_security_group" "rds" {
-  name        = "rds-security-group"
+  name        = "${terraform.workspace}_rds-security-group"
   description = "Allows inbound access from ECS only"
   vpc_id      = aws_vpc.production-vpc.id
 

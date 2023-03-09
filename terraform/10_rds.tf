@@ -1,11 +1,11 @@
 resource "aws_db_subnet_group" "production" {
-  name       = "main"
+  name       = "${terraform.workspace}-main"
   subnet_ids = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id]
 }
 
 resource "aws_db_instance" "production" {
-  identifier              = "production"
-  db_name                 = var.rds_db_name
+  identifier              = "${terraform.workspace}db"
+  db_name                 = "${terraform.workspace}db"
   username                = local.db_creds.username
   password                = local.db_creds.password
   port                    = "5432"

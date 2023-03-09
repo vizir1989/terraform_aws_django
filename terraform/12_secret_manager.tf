@@ -4,16 +4,16 @@ resource "random_password" "rds_password" {
 }
 
 resource "aws_secretsmanager_secret" "secret_master_db" {
-  name = var.secret_id
+  name = "${terraform.workspace}-${var.secret_id}"
 }
 
-resource "aws_secretsmanager_secret_version" "sversion" {
+resource "aws_secretsmanager_secret_version" "secret_version" {
   secret_id     = aws_secretsmanager_secret.secret_master_db.id
   secret_string = <<EOF
-   {
-    "username": "django",
-    "password": "${random_password.rds_password.result}"
-   }
+  {
+      "username": "django",
+      "password": "${random_password.rds_password.result}"
+  }
 EOF
 }
 
