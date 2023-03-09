@@ -111,8 +111,13 @@ jobs:
         run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
 
       - name: Create Terraform Workspace
-        id: workspace
-        run: cd ./terraform && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }} && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
+        id: create_workspace
+        continue-on-error: true
+        run: cd ./terraform && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }}
+
+      - name: Select Terraform Workspace
+        id: select_workspace
+        run: cd ./terraform && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
 
       - name: Terraform Validate
         id: validate
@@ -228,10 +233,13 @@ jobs:
         run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
 
       - name: Create Terraform Workspace
-        id: workspace
-        if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
-        run: cd ./terraform && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }} && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
+        id: create_workspace
+        continue-on-error: true
+        run: cd ./terraform && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }}
 
+      - name: Select Terraform Workspace
+        id: select_workspace
+        run: cd ./terraform && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
       - name: Sleep for 45 minutes
         run: sleep ${{ vars.DELETION_DELAY }}
         shell: bash
