@@ -4,7 +4,7 @@ resource "random_password" "rds_password" {
 }
 
 resource "random_password" "django_superuser_password" {
-  length  = 16
+  length  = 8
   special = false
 }
 
