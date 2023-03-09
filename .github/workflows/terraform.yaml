@@ -23,6 +23,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Set Terraform Workspace
+        id: workspace_main
+        if: github.ref == 'refs/heads/main'
+        run: echo "TERRAFORM_WORKSPACE=prod" >> $GITHUB_ENV
+
+      - name: Set Terraform Workspace
+        id: workspace_stage
+        if: github.ref == 'refs/heads/stage'
+        run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
+
+      - name: Set Terraform Workspace
+        id: workspace_dev
+        if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
+        run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -30,7 +45,7 @@ jobs:
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Build and push Djnago
+      - name: Build and push Django
         uses: docker/build-push-action@v4
         with:
           context: .
