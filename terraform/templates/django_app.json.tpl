@@ -25,7 +25,7 @@
       },
       {
         "name": "DJANGO_SUPERUSER_EMAIL",
-        "value": "admin"
+        "value": ""
       },
       {
         "name": "RDS_DB_NAME",
