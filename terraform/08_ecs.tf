@@ -17,15 +17,16 @@ data "template_file" "app" {
   template = file("templates/django_app.json.tpl")
 
   vars = {
-    docker_image_url_django = var.docker_image_url_django
-    docker_image_url_nginx  = var.docker_image_url_nginx
-    region                  = data.aws_region.current.name
-    rds_db_name             = aws_db_instance.production.id
-    rds_password_kms_id     = aws_secretsmanager_secret.secret_master_db.id
-    rds_hostname            = aws_db_instance.production.address
-    allowed_hosts           = var.allowed_hosts
-    bucket_name             = aws_s3_bucket.bucket.bucket
-    terraform_workspace     = terraform.workspace
+    docker_image_url_django   = var.docker_image_url_django
+    docker_image_url_nginx    = var.docker_image_url_nginx
+    region                    = data.aws_region.current.name
+    rds_db_name               = aws_db_instance.production.id
+    rds_password_kms_id       = aws_secretsmanager_secret.secret_master_db.id
+    rds_hostname              = aws_db_instance.production.address
+    allowed_hosts             = var.allowed_hosts
+    bucket_name               = aws_s3_bucket.bucket.bucket
+    terraform_workspace       = terraform.workspace
+    django_superuser_password = random_password.django_superuser_password.result
   }
 }
 
