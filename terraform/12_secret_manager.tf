@@ -16,7 +16,7 @@ resource "aws_secretsmanager_secret_version" "secret_version" {
   secret_id     = aws_secretsmanager_secret.secret_master_db.id
   secret_string = <<EOF
   {
-      "django_superuser_password": "${random_password.django_superuser_password.result}"
+      "django_superuser_password": "${random_password.django_superuser_password.result}",
       "username": "django",
       "password": "${random_password.rds_password.result}"
   }
