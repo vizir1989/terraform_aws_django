@@ -91,14 +91,9 @@ jobs:
         id: fmt
         run: cd ./terraform && terraform fmt -check
 
-      - name: Terraform lock
-        id: lock
-        run: terraform providers lock -platform=linux_amd64
-
       - name: Terraform Init
         id: init
-        run: cd ./terraform && terraform init && terraform providers lock -platform=darwin_arm64
-
+        run: cd ./terraform && terraform init
 
       - name: Set Terraform Workspace
         id: workspace_main
@@ -211,13 +206,9 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform lock
-        id: lock
-        run: terraform providers lock -platform=linux_amd64
-
       - name: Terraform Init
         id: init
-        run: cd ./terraform && terraform init && terraform providers lock -platform=darwin_arm64
+        run: cd ./terraform && terraform init
 
       - name: Set Terraform Workspace
         id: workspace_main
