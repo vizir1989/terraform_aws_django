@@ -153,4 +153,4 @@ AWS_DEFAULT_ACL = None
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = os.getenv('ALLOWED_HOSTS', '').split()
+CSRF_TRUSTED_ORIGINS = list(map(lambda x: "https://*" + x, os.getenv('ALLOWED_HOSTS', '').split()))
