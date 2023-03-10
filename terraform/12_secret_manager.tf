@@ -3,6 +3,11 @@ resource "random_password" "rds_password" {
   special = false
 }
 
+resource "random_password" "django_secret_key" {
+  length  = 24
+  override_special = "_$#%^&*@!_-+<>?"
+}
+
 resource "random_password" "django_superuser_password" {
   length  = 8
   special = false
@@ -16,6 +21,7 @@ resource "aws_secretsmanager_secret_version" "secret_version" {
   secret_id     = aws_secretsmanager_secret.secret_master_db.id
   secret_string = <<EOF
   {
+      "django_secret_key": "${random_password.django_secret_key.result}"
       "django_superuser_password": "${random_password.django_superuser_password.result}",
       "username": "django",
       "password": "${random_password.rds_password.result}"
