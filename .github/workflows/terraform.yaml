@@ -56,7 +56,7 @@ jobs:
           context: .
           file: ./Dockerfiles/nginx.Dockerfile
           push: true
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:${{ env.TERRAFORM_WORKSPACE }}
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_nginx:${{ env.TERRAFORM_WORKSPACE }}
 
   terraform:
     name: "Terraform"
