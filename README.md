@@ -6,9 +6,10 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 
 ## Architecture
 <p align="center">
-  <img alt="aws_architecture" src="https://github.com/vizir1989/terraform_aws_django/blob/stage/aws-architecture.png" />
+  <img alt="aws_architecture" src="https://github.com/vizir1989/terraform_aws_django/blob/main/aws-architecture.png" />
   <p align="center">AWS Architecture.</p>
 </p>
+
 
 ## AWS
 - [EC2](https://aws.amazon.com/ec2/)
@@ -30,10 +31,7 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 ## CI/CD
 - [Terraform](https://www.terraform.io/)
 - [GitAction](https://github.com/features/actions)
-- [Pytest](https://docs.pytest.org/)
-- [Black](https://pypi.org/project/black/)
-- [Flake8](https://flake8.pycqa.org/en/latest/)
-- [Poetry](https://python-poetry.org/)
+
 
 ## Secrets and Variables
 
