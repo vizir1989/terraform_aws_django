@@ -6,7 +6,7 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 
 ## Architecture
 <p align="center">
-  <img alt="aws_architecture" src="https://github.com/vizir1989/terraform_aws_django/blob/main/aws-architecture.png" />
+  <img alt="aws_architecture" src="https://github.com/vizir1989/terraform_aws_django/blob/stage/aws-architecture.png" />
   <p align="center">AWS Architecture.</p>
 </p>
 
