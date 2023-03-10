@@ -4,8 +4,8 @@ resource "random_password" "rds_password" {
 }
 
 resource "random_password" "django_secret_key" {
-  length           = 24
-  override_special = "_$#%^&*@!_-+<>?"
+  length           = 50
+  override_special = "!@#$%^&*(-_=+)"
 }
 
 resource "random_password" "django_superuser_password" {
