@@ -2,7 +2,7 @@
 
 This is a template for creating Django + NGINX application and automatically deploying on AWS.
 
-Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, GitAction, poetry.
+Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, GitAction, pytest, poetry, black, flake8.
 
 ## Architecture
 <p align="center">
@@ -31,7 +31,10 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 ## CI/CD
 - [Terraform](https://www.terraform.io/)
 - [GitAction](https://github.com/features/actions)
-
+- [Pytest](https://docs.pytest.org/)
+- [Black](https://pypi.org/project/black/)
+- [Flake8](https://flake8.pycqa.org/en/latest/)
+- [Poetry](https://python-poetry.org/)
 
 ## Secrets and Variables
 
@@ -62,3 +65,4 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 6. [Automate Terraform with GitHub Actions](https://developer.hashicorp.com/terraform/tutorials/automation/github-actions)
 7. [Become an AWS and Terraform Expert](https://www.educative.io/path/become-an-aws-and-terraform-expert)
 8. [What are Terraform Workspaces? Overview with Examples](https://spacelift.io/blog/terraform-workspaces)
+9. [Docker. Multi-stage builds](https://docs.docker.com/build/building/multi-stage/)
