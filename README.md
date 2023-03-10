@@ -6,7 +6,7 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 
 ## Architecture
 <p align="center">
-  <img alt="aws_architecture" src="https://github.com/vizir1989/terraform_aws_django/blob/main/aws-architecture.png" />
+  <img alt="aws_architecture" src="https://github.com/vizir1989/terraform_aws_django/blob/stage/aws-architecture.png" />
   <p align="center">AWS Architecture.</p>
 </p>
 
@@ -47,6 +47,8 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 - AWS_DEFAULT_REGION
 - AWS_SECRET_ID (name for secrets in AWS Secrets Manager)
 - DELETION_DELAY (delay before delete infrastructure on AWS)
+- HOSTED_ZONE
+- PROJECT_NAME (only alphabets symbols)
 
 # Reference
 1. [Deploying Django to AWS ECS with Terraform](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/)

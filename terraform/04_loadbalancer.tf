@@ -1,11 +1,16 @@
 # Production Load Balancer
 
 resource "aws_lb" "production" {
-  name               = "${terraform.workspace}-alb"
+  name               = "${terraform.workspace}-${var.project_name}-alb"
   load_balancer_type = "application"
   internal           = false
   security_groups    = [aws_security_group.load-balancer.id]
   subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
+
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
+  }
 
   access_logs {
     bucket  = aws_s3_bucket.bucket.id
@@ -16,10 +21,15 @@ resource "aws_lb" "production" {
 
 # Target group
 resource "aws_alb_target_group" "default-target-group" {
-  name     = "${terraform.workspace}-tg"
+  name     = "${terraform.workspace}-${var.project_name}-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.production-vpc.id
+
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
+  }
 
   health_check {
     path                = var.health_check_path
@@ -36,6 +46,11 @@ resource "aws_lb_listener" "ecs-alb-http-listener" {
   load_balancer_arn = aws_lb.production.id
   port              = "80"
   protocol          = "HTTP"
+
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
+  }
 
   default_action {
     type = "redirect"
@@ -56,6 +71,11 @@ resource "aws_alb_listener" "ecs-alb-https-listener" {
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = var.certificate_arn
   depends_on        = [aws_alb_target_group.default-target-group]
+
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
+  }
 
   default_action {
     type             = "forward"

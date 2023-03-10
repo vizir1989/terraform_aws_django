@@ -1,5 +1,5 @@
 resource "aws_autoscaling_group" "ecs-cluster" {
-  name                 = "${terraform.workspace}_auto_scaling_group"
+  name                 = "${terraform.workspace}_${var.project_name}_auto_scaling_group"
   min_size             = terraform.workspace == "prod" ? var.autoscale_min : 1
   max_size             = terraform.workspace == "prod" ? var.autoscale_max : 4
   desired_capacity     = terraform.workspace == "prod" ? var.autoscale_desired : 2
