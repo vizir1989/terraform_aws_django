@@ -4,7 +4,7 @@ resource "random_password" "rds_password" {
 }
 
 resource "random_password" "django_secret_key" {
-  length  = 24
+  length           = 24
   override_special = "_$#%^&*@!_-+<>?"
 }
 
