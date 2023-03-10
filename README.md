@@ -11,24 +11,49 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 </p>
 
 
-[//]: # (Based on [deploying-django-to-ecs-with-terraform]&#40;https://testdriven.io/blog/deploying-django-to-ecs-with-terraform&#41;)
+## AWS
+- [EC2](https://aws.amazon.com/ec2/)
+- [S3](https://aws.amazon.com/s3/)
+- [VPC](https://aws.amazon.com/vpc/)
+- [ALB](https://aws.amazon.com/elasticloadbalancing/)
+- [IAM](https://aws.amazon.com/iam/)
+- [CloudWatch](https://aws.amazon.com/cloudwatch/)
+- [Secrets Manager](https://aws.amazon.com/secrets-manager/)
+- [ECS](https://aws.amazon.com/ecs/)
+- [Autoscaling](https://aws.amazon.com/ec2/autoscaling/)
+- [RDS](https://aws.amazon.com/rds/)
+- [Route 53](https://aws.amazon.com/route53/)
 
-[//]: # ()
-[//]: # (S3 static file based on this [article]&#40;https://medium.com/the-geospatials/serve-django-static-files-on-aws-s3-part-1-da41b05f3a79&#41;)
+## Backend
+- [NGINX](https://www.nginx.com/)
+- [Django 4.1](https://www.djangoproject.com/)
 
-[//]: # ()
-[//]: # (TODO: )
+## CI/CD
+- [Terraform](https://www.terraform.io/)
+- [GitAction](https://github.com/features/actions)
 
-[//]: # (1. added AWS Secret Manager with rotation for [DB1]&#40;https://stackoverflow.com/questions/60879366/django-aws-secret-manager-password-rotation&#41; [DB2]&#40;https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1&#41; +)
 
-[//]: # (2. added certificate &#40;433 port&#41; &#40;[see]&#40;https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/#domain-and-ssl-certificate&#41;&#41; +)
+## Secrets and Variables
 
-[//]: # (3. added github ci/cd +)
+### Secrets
+- AWS_ACCOUNT_ID
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- AWS_CERTIFICATE_ARN (need for aws alb)
+- AWS_PUB_KEY (generate by command `aws ecr get-login-password --region <region>`. Need for AWS KeyPair)
+- TOKEN (need for GitAction)
 
-[//]: # (4. added different branch - different sites)
+# Variables
+- AWS_DEFAULT_REGION
+- AWS_SECRET_ID (name for secrets in AWS Secrets Manager)
+- DELETION_DELAY (delay before delete infrastructure on AWS)
 
-[//]: # (5. added AWS Secret Manager for saving Django [security key]&#40;https://www.prplbx.com/resources/blog/django-part2/&#41; +)
-
-[//]: # (6. added s3 as backend for terraform +)
-
-[//]: # (7. on prod use rds cluster instead of rds instance)
+# Reference
+1. [Deploying Django to AWS ECS with Terraform](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/)
+2. Serve Django Static & Media files on AWS S3 [1](https://medium.com/the-geospatials/serve-django-static-files-on-aws-s3-part-1-da41b05f3a79) [2](https://medium.com/the-geospatials/serve-django-static-media-files-on-aws-s3-part-2-d0e8578dd2db)
+3. AWS Secret Manager with Rotation [1](https://blog.gruntwork.io/a-comprehensive-guide-to-managing-secrets-in-your-terraform-code-1d586955ace1) [2](https://stackoverflow.com/questions/60879366/django-aws-secret-manager-password-rotation)
+4. Ultimate Guide to Securely Deploy Django at Scale on AWS ECS [2](https://www.prplbx.com/resources/blog/django-part2/) [3](https://www.prplbx.com/resources/blog/django-part3/)
+5. [How to Manage Terraform S3 Backend – Best Practices](https://spacelift.io/blog/terraform-s3-backend)
+6. [Automate Terraform with GitHub Actions](https://developer.hashicorp.com/terraform/tutorials/automation/github-actions)
+7. [Become an AWS and Terraform Expert](https://www.educative.io/path/become-an-aws-and-terraform-expert)
+8. [What are Terraform Workspaces? Overview with Examples](https://spacelift.io/blog/terraform-workspaces)
