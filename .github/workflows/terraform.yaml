@@ -196,7 +196,7 @@ jobs:
       - name: Set Terraform Workspace
         id: workspace_dev
         if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
-        run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
+        run: echo "TERRAFORM_WORKSPACE=dev" >> $GITHUB_ENV
 
       - name: Create Terraform Workspace
         id: create_workspace
