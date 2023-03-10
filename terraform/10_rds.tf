@@ -1,11 +1,16 @@
 resource "aws_db_subnet_group" "production" {
-  name       = "${terraform.workspace}-main"
+  name       = "${terraform.workspace}-${var.project_name}-main"
   subnet_ids = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id]
+
+  tags = {
+    "project": var.project_name
+    "type": terraform.workspace
+  }
 }
 
 resource "aws_db_instance" "production" {
-  identifier              = "${terraform.workspace}db"
-  db_name                 = "${terraform.workspace}db"
+  identifier              = "${terraform.workspace}${var.project_name}db"
+  db_name                 = "${terraform.workspace}${var.project_name}db"
   username                = local.db_creds.username
   password                = local.db_creds.password
   port                    = "5432"
@@ -21,4 +26,9 @@ resource "aws_db_instance" "production" {
   publicly_accessible     = false
   backup_retention_period = 7
   skip_final_snapshot     = true
+
+  tags = {
+    "project": var.project_name
+    "type": terraform.workspace
+  }
 }

@@ -8,6 +8,16 @@ variable "region_replica" {
   default     = "us-east-1"
 }
 
+# project_name
+variable "project_name" {
+  description = "Project name"
+
+  validation {
+    condition     = can(regex("^[a-zA-Z]+$", var.project_name))
+    error_message = "You can use only alphabets symbols (a-zA-Z)"
+  }
+}
+
 # tf backend
 variable "tf_backend_bucket_name" {
   default = "terraform_aws_django_state"
@@ -118,21 +128,9 @@ variable "docker_image_url_nginx" {
   description = "Docker image to run in the ECS cluster"
 }
 
-# allowed host
-variable "allowed_hosts" {
-  description = "Domain name for allowed hosts"
-  default     = ".thevizironline.com .amazonaws.com"
-}
-
 # route53
 variable "hosted_zone" {
   description = "Hosted zone"
-  default     = "thevizironline.com"
-}
-
-variable "subdomain" {
-  description = "Subdomain for elb"
-  default     = "django"
 }
 
 # secret manager
