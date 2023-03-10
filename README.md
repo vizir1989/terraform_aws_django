@@ -51,7 +51,7 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 - PROJECT_NAME (only alphabets symbols)
 
 # Preparation of AWS
-1. Create repo in ECR with name ${{ PROJECT_NAME }}_django and ${{ PROJECT_NAME }}_nginx
+1. Create repo in ECR with name \$\{\{ PROJECT_NAME \}\}_django and \$\{\{ PROJECT_NAME \}\}_nginx
 
 # Reference
 1. [Deploying Django to AWS ECS with Terraform](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/)
