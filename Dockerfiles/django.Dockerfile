@@ -1,4 +1,4 @@
-FROM python:3.10.0-slim-buster
+FROM python:3.10.0-slim-buster as base
 
 ARG POETRY_VERSION=1.4.0
 
@@ -22,10 +22,24 @@ RUN apt-get update \
 COPY ./app/pyproject.toml ./app/poetry.lock /usr/src/app/
 
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi \
+    && poetry install --no-interaction --no-ansi --without dev \
     && mkdir -p /var/log && chown -R 1777 /var/log
 
 COPY ./app /usr/src/app
+COPY ./README.md /usr/src/app
+
 RUN chmod +x ./scripts/run_server.sh
-# ENTRYPOINT bash -c "while :; do echo 'Hit CTRL+C'; sleep 1; done"
-# ENTRYPOINT bash -c "gunicorn terraform_aws_django.wsgi:application --bind 0.0.0.0:8000"
+
+FROM base as test
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi
+RUN chmod +x ./scripts/test.sh
+RUN ./scripts/test.sh
+
+FROM base as lint
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi
+RUN chmod +x ./scripts/lint.sh
+RUN ./scripts/lint.sh
+
+FROM base as dist-image
