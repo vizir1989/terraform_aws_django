@@ -27,6 +27,7 @@ data "template_file" "app" {
     bucket_name               = aws_s3_bucket.bucket.bucket
     terraform_workspace       = terraform.workspace
     django_superuser_password = random_password.django_superuser_password.result
+    django_secret_key         = random_password.django_secret_key.result
   }
 }
 
