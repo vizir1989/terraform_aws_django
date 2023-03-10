@@ -127,7 +127,7 @@ jobs:
         if: github.event_name == 'push'
         env:
           TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:${{ env.TERRAFORM_WORKSPACE }}
-          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:${{ env.TERRAFORM_WORKSPACE }}
+          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_nginx:${{ env.TERRAFORM_WORKSPACE }}
         run: cd ./terraform && terraform apply -auto-approve -input=false
 
       - name: Install python
