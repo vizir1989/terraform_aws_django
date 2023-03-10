@@ -71,7 +71,7 @@ jobs:
       TF_VAR_region: ${{ vars.AWS_DEFAULT_REGION }}
       TF_VAR_certificate_arn: ${{ secrets.AWS_CERTIFICATE_ARN }}
       TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
-      TF_VAR_project_name: $${{ vars.PROJECT_NAME }}
+      TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
       TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
     steps:
       - name: Checkout
@@ -163,7 +163,7 @@ jobs:
       TF_VAR_region: ${{ vars.AWS_DEFAULT_REGION }}
       TF_VAR_certificate_arn: ${{ secrets.AWS_CERTIFICATE_ARN }}
       TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
-      TF_VAR_project_name: $${{ vars.PROJECT_NAME }}
+      TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
       TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
     if: ${{ always() }}
     steps:
