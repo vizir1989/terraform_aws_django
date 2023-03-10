@@ -1,6 +1,10 @@
 resource "aws_s3_bucket" "bucket" {
-  bucket        = "${terraform.workspace}-terraformaws-aws-django"
+  bucket        = "${terraform.workspace}-${var.project_name}-terraform-aws-django"
   force_destroy = true
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
+  }
 }
 
 resource "aws_s3_bucket_acl" "bucket_acl" {
@@ -10,10 +14,11 @@ resource "aws_s3_bucket_acl" "bucket_acl" {
 
 resource "aws_s3_bucket_cors_configuration" "bucket_cors" {
   bucket = aws_s3_bucket.bucket.id
+
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["GET"]
-    allowed_origins = [aws_lb.production.dns_name, "*.thevizironline.com", "*.amazonaws.com"]
+    allowed_origins = [aws_lb.production.dns_name, "*.${var.hosted_zone}", "*.amazonaws.com"]
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }

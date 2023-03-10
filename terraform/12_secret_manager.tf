@@ -14,7 +14,12 @@ resource "random_password" "django_superuser_password" {
 }
 
 resource "aws_secretsmanager_secret" "secret_master_db" {
-  name = "${terraform.workspace}-${var.secret_id}"
+  name = "${terraform.workspace}-${var.project_name}-${var.secret_id}"
+
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
+  }
 }
 
 resource "aws_secretsmanager_secret_version" "secret_version" {

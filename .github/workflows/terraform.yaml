@@ -48,7 +48,7 @@ jobs:
           context: .
           file: ./Dockerfiles/django.Dockerfile
           push: true
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:${{ env.TERRAFORM_WORKSPACE }}
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
 
       - name: Build and push Nginx
         uses: docker/build-push-action@v4
@@ -56,7 +56,7 @@ jobs:
           context: .
           file: ./Dockerfiles/nginx.Dockerfile
           push: true
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:${{ env.TERRAFORM_WORKSPACE }}
+          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
 
   terraform:
     name: "Terraform"
@@ -71,6 +71,8 @@ jobs:
       TF_VAR_region: ${{ vars.AWS_DEFAULT_REGION }}
       TF_VAR_certificate_arn: ${{ secrets.AWS_CERTIFICATE_ARN }}
       TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
+      TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
+      TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3.3.0
@@ -124,8 +126,8 @@ jobs:
         id: apply
         if: github.event_name == 'push'
         env:
-          TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:${{ env.TERRAFORM_WORKSPACE }}
-          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:${{ env.TERRAFORM_WORKSPACE }}
+          TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
+          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
         run: cd ./terraform && terraform apply -auto-approve -input=false
 
       - name: Install python
@@ -140,13 +142,13 @@ jobs:
       - name: Update docker images
         if: github.event_name == 'push'
         id: update_docker
-        run: cd ./deploy && python update-ecs.py --cluster="${{ env.TERRAFORM_WORKSPACE }}-cluster" --service="${{ env.TERRAFORM_WORKSPACE }}-service"
+        run: cd ./deploy && python update-ecs.py --cluster="${{ env.TERRAFORM_WORKSPACE }}-${{ vars.PROJECT_NAME }}-cluster" --service="${{ env.TERRAFORM_WORKSPACE }}-${{ vars.PROJECT_NAME }}-service"
 
       - name: Terraform Update Docker Images
         id: update_docker_images
         env:
-          TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:${{ env.TERRAFORM_WORKSPACE }}
-          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:${{ env.TERRAFORM_WORKSPACE }}
+          TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
+          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
         if: github.event_name == 'push'
         run: cd ./terraform && terraform apply -auto-approve -input=false
 
@@ -161,6 +163,8 @@ jobs:
       TF_VAR_region: ${{ vars.AWS_DEFAULT_REGION }}
       TF_VAR_certificate_arn: ${{ secrets.AWS_CERTIFICATE_ARN }}
       TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
+      TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
+      TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
     if: ${{ always() }}
     steps:
       - name: Checkout
@@ -212,9 +216,9 @@ jobs:
 
       - name: Terraform delete
         env:
-          TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/terraform_aws_django:${{ env.TERRAFORM_WORKSPACE }}
-          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/nginx:${{ env.TERRAFORM_WORKSPACE }}
+          TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
+          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
         run: cd ./terraform && terraform destroy -auto-approve -input=false
 
       - name: Delete aws secret
-        run: aws secretsmanager delete-secret --secret-id ${{ env.TERRAFORM_WORKSPACE }}-${{ vars.AWS_SECRET_ID }} --force-delete-without-recovery --region ${{ vars.AWS_DEFAULT_REGION }}
+        run: aws secretsmanager delete-secret --secret-id ${{ env.TERRAFORM_WORKSPACE }}-${{ vars.PROJECT_NAME }}-${{ vars.AWS_SECRET_ID }} --force-delete-without-recovery --region ${{ vars.AWS_DEFAULT_REGION }}

@@ -63,9 +63,9 @@
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-group": "/ecs/django-app-${terraform_workspace}",
+        "awslogs-group": "/ecs/${project_name}-${terraform_workspace}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "django-app-log-stream-${terraform_workspace}"
+        "awslogs-stream-prefix": "${project_name}-log-stream-${terraform_workspace}"
       }
     }
   },
@@ -86,9 +86,9 @@
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-group": "/ecs/nginx-${terraform_workspace}",
+        "awslogs-group": "/ecs/${project_name}-nginx-${terraform_workspace}",
         "awslogs-region": "${region}",
-        "awslogs-stream-prefix": "nginx-log-stream-${terraform_workspace}"
+        "awslogs-stream-prefix": "${project_name}-nginx-log-stream-${terraform_workspace}"
       }
     }
   }
