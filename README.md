@@ -63,3 +63,4 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 7. [Become an AWS and Terraform Expert](https://www.educative.io/path/become-an-aws-and-terraform-expert)
 8. [What are Terraform Workspaces? Overview with Examples](https://spacelift.io/blog/terraform-workspaces)
 9. [Docker. Multi-stage builds](https://docs.docker.com/build/building/multi-stage/)
+10. [Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
