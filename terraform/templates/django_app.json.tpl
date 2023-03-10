@@ -16,6 +16,10 @@
     "command": ["./scripts/run_server.sh"],
     "environment": [
       {
+        "name": "DJANGO_SECRET_KEY",
+        "value": "${django_secret_key}"
+      },
+      {
         "name": "DJANGO_SUPERUSER_PASSWORD",
         "value": "${django_superuser_password}"
       },
