@@ -17,8 +17,8 @@ resource "aws_secretsmanager_secret" "secret_master_db" {
   name = "${terraform.workspace}-${var.project_name}-${var.secret_id}"
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 

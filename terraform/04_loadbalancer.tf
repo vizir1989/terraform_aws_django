@@ -8,8 +8,8 @@ resource "aws_lb" "production" {
   subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 
   access_logs {
@@ -27,8 +27,8 @@ resource "aws_alb_target_group" "default-target-group" {
   vpc_id   = aws_vpc.production-vpc.id
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 
   health_check {
@@ -48,8 +48,8 @@ resource "aws_lb_listener" "ecs-alb-http-listener" {
   protocol          = "HTTP"
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 
   default_action {
@@ -73,8 +73,8 @@ resource "aws_alb_listener" "ecs-alb-https-listener" {
   depends_on        = [aws_alb_target_group.default-target-group]
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 
   default_action {

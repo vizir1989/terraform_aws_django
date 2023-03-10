@@ -5,8 +5,8 @@ resource "aws_security_group" "load-balancer" {
   vpc_id      = aws_vpc.production-vpc.id
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 
   ingress {
@@ -38,8 +38,8 @@ resource "aws_security_group" "ecs" {
   vpc_id      = aws_vpc.production-vpc.id
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 
   ingress {
@@ -71,8 +71,8 @@ resource "aws_security_group" "rds" {
   vpc_id      = aws_vpc.production-vpc.id
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 
   ingress {

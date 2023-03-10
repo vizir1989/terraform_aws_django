@@ -4,8 +4,8 @@ resource "aws_vpc" "production-vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -15,8 +15,8 @@ resource "aws_subnet" "public-subnet-1" {
   vpc_id            = aws_vpc.production-vpc.id
   availability_zone = var.availability_zones[0]
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -25,8 +25,8 @@ resource "aws_subnet" "public-subnet-2" {
   vpc_id            = aws_vpc.production-vpc.id
   availability_zone = var.availability_zones[1]
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -36,8 +36,8 @@ resource "aws_subnet" "private-subnet-1" {
   vpc_id            = aws_vpc.production-vpc.id
   availability_zone = var.availability_zones[0]
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -46,8 +46,8 @@ resource "aws_subnet" "private-subnet-2" {
   vpc_id            = aws_vpc.production-vpc.id
   availability_zone = var.availability_zones[1]
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -55,16 +55,16 @@ resource "aws_subnet" "private-subnet-2" {
 resource "aws_route_table" "public-route-table" {
   vpc_id = aws_vpc.production-vpc.id
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
 resource "aws_route_table" "private-route-table" {
   vpc_id = aws_vpc.production-vpc.id
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -95,8 +95,8 @@ resource "aws_eip" "elastic-ip-for-nat-gw" {
   associate_with_private_ip = "10.0.0.5"
   depends_on                = [aws_internet_gateway.production-igw]
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -106,8 +106,8 @@ resource "aws_nat_gateway" "nat-gw" {
   subnet_id     = aws_subnet.public-subnet-1.id
   depends_on    = [aws_eip.elastic-ip-for-nat-gw]
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -121,8 +121,8 @@ resource "aws_route" "nat-gw-route" {
 resource "aws_internet_gateway" "production-igw" {
   vpc_id = aws_vpc.production-vpc.id
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 

@@ -13,8 +13,8 @@ resource "aws_iam_role" "ecs-service-role" {
   name               = "ecs_service_role_${terraform.workspace}_${var.project_name}"
   assume_role_policy = file("policies/ecs-role.json")
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_iam_instance_profile" "ecs" {
   path = "/"
   role = aws_iam_role.ecs-host-role.name
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }

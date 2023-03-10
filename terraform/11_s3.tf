@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "bucket" {
   bucket        = "${terraform.workspace}-${var.project_name}-terraform-aws-django"
   force_destroy = true
-    tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 

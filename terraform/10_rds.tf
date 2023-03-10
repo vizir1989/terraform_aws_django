@@ -3,8 +3,8 @@ resource "aws_db_subnet_group" "production" {
   subnet_ids = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id]
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_db_instance" "production" {
   skip_final_snapshot     = true
 
   tags = {
-    "project": var.project_name
-    "type": terraform.workspace
+    "project" : var.project_name
+    "type" : terraform.workspace
   }
 }
