@@ -2,11 +2,11 @@
 
 This is a template for creating Django + NGINX application and automatically deploying on AWS.
 
-Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, GitAction, poetry.
+Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, GitAction, pytest, poetry, black, flake8.
 
 ## Architecture
 <p align="center">
-  <img alt="aws_architecture" src="https://github.com/vizir1989/terraform_aws_django/blob/stage/aws-architecture.png" />
+  <img alt="aws_architecture" src="https://github.com/vizir1989/terraform_aws_django/blob/main/aws-architecture.png" />
   <p align="center">AWS Architecture.</p>
 </p>
 
@@ -50,6 +50,9 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 - HOSTED_ZONE
 - PROJECT_NAME (only alphabets symbols)
 
+# Preparation of AWS
+1. Create repo in ECR with name ${{ PROJECT_NAME }}_django and ${{ PROJECT_NAME }}_nginx
+
 # Reference
 1. [Deploying Django to AWS ECS with Terraform](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/)
 2. Serve Django Static & Media files on AWS S3 [1](https://medium.com/the-geospatials/serve-django-static-files-on-aws-s3-part-1-da41b05f3a79) [2](https://medium.com/the-geospatials/serve-django-static-media-files-on-aws-s3-part-2-d0e8578dd2db)
@@ -59,3 +62,4 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 6. [Automate Terraform with GitHub Actions](https://developer.hashicorp.com/terraform/tutorials/automation/github-actions)
 7. [Become an AWS and Terraform Expert](https://www.educative.io/path/become-an-aws-and-terraform-expert)
 8. [What are Terraform Workspaces? Overview with Examples](https://spacelift.io/blog/terraform-workspaces)
+9. [Docker. Multi-stage builds](https://docs.docker.com/build/building/multi-stage/)
