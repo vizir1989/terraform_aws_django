@@ -19,7 +19,6 @@ jobs:
           context: .
           file: ./Dockerfiles/django.Dockerfile
           push: false
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
           target: test
 
       - name: Lint
@@ -28,7 +27,6 @@ jobs:
           context: .
           file: ./Dockerfiles/django.Dockerfile
           push: false
-          tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
           target: lint
 
   docker:
