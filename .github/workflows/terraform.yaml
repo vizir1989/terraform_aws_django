@@ -142,7 +142,7 @@ jobs:
       - name: Update docker images
         if: github.event_name == 'push'
         id: update_docker
-        run: cd ./deploy && python update-ecs.py --cluster="${{ env.TERRAFORM_WORKSPACE }}-cluster" --service="${{ env.TERRAFORM_WORKSPACE }}-service"
+        run: cd ./deploy && python update-ecs.py --cluster="${{ env.TERRAFORM_WORKSPACE }}-${{ vars.PROJECT_NAME }}-cluster" --service="${{ env.TERRAFORM_WORKSPACE }}-${{ vars.PROJECT_NAME }}-service"
 
       - name: Terraform Update Docker Images
         id: update_docker_images
