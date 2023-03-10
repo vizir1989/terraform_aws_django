@@ -10,7 +10,6 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
   <p align="center">AWS Architecture.</p>
 </p>
 
-
 ## AWS
 - [EC2](https://aws.amazon.com/ec2/)
 - [S3](https://aws.amazon.com/s3/)
