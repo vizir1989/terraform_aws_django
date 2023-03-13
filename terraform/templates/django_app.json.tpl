@@ -1,6 +1,6 @@
 [
   {
-    "name": "terraform_aws_django",
+    "name": "${project_name}_${terraform_workspace}_django",
     "image": "${docker_image_url_django}",
     "essential": true,
     "cpu": 10,
@@ -75,7 +75,7 @@
     "essential": true,
     "cpu": 10,
     "memory": 128,
-    "links": ["terraform_aws_django"],
+    "links": ["${project_name}_${terraform_workspace}_django"],
     "portMappings": [
       {
         "containerPort": 443,
