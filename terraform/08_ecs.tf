@@ -62,7 +62,7 @@ resource "aws_ecs_service" "production" {
 
   load_balancer {
     target_group_arn = aws_alb_target_group.default-target-group.arn
-    container_name   = "nginx"
-    container_port   = 443
+    container_name   = "${var.project_name}_nginx"
+    container_port   = 80
   }
 }

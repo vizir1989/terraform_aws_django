@@ -53,6 +53,9 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 # Preparation of AWS
 1. Create repo in ECR with name PROJECT_NAME_django and PROJECT_NAME_nginx
 
+# TODO
+1. Rather than routing traffic on port 80 to Nginx, add a listener for port 443.
+
 # Reference
 1. [Deploying Django to AWS ECS with Terraform](https://testdriven.io/blog/deploying-django-to-ecs-with-terraform/)
 2. Serve Django Static & Media files on AWS S3 [1](https://medium.com/the-geospatials/serve-django-static-files-on-aws-s3-part-1-da41b05f3a79) [2](https://medium.com/the-geospatials/serve-django-static-media-files-on-aws-s3-part-2-d0e8578dd2db)
