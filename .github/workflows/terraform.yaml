@@ -103,7 +103,7 @@ jobs:
     steps:
       - name: Set type of AWS
         run: |
-          if ${{ vars.AWS_TYPE }} == "cheap" then echo "TERRAFORM_DIR=./terraform_cheap" >> $GITHUB_ENV  else echo "TERRAFORM_DIR=./terraform" >> $GITHUB_ENV fi;
+          if [[ ${{ vars.AWS_TYPE }} == "cheap" ]]; then echo "TERRAFORM_DIR=./terraform_cheap" >> $GITHUB_ENV  else echo "TERRAFORM_DIR=./terraform" >> $GITHUB_ENV fi
 
       - name: Checkout
         uses: actions/checkout@v3.3.0
@@ -200,8 +200,7 @@ jobs:
     steps:
       - name: Set type of AWS
         run: |
-          if ${{ vars.AWS_TYPE }} == "cheap" then echo "TERRAFORM_DIR=./terraform_cheap" >> $GITHUB_ENV  else echo "TERRAFORM_DIR=./terraform" >> $GITHUB_ENV fi;
-
+          if [[ ${{ vars.AWS_TYPE }} == "cheap" ]]; then echo "TERRAFORM_DIR=./terraform_cheap" >> $GITHUB_ENV  else echo "TERRAFORM_DIR=./terraform" >> $GITHUB_ENV fi
       - name: Checkout
         uses: actions/checkout@v3.3.0
         with:
