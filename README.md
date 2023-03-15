@@ -49,6 +49,7 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 - DELETION_DELAY (delay before delete infrastructure on AWS)
 - HOSTED_ZONE
 - PROJECT_NAME (only alphabets symbols)
+- AWS_TYPE (possible values "cheap", "expensive". Base on this value terraform create ec2 for NAT (cheap) or NAT Gateway (expensive))
 
 # Preparation of AWS
 1. Create repo in ECR with name PROJECT_NAME_django and PROJECT_NAME_nginx
