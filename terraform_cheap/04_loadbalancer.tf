@@ -6,7 +6,7 @@ resource "aws_lb" "production" {
   internal           = false
   security_groups    = [aws_security_group.load-balancer.id]
   subnets            = module.vpc.public_subnets
- # subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
+  # subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
 
   tags = {
     "project" : var.project_name

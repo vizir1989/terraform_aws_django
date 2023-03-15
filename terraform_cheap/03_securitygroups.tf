@@ -35,7 +35,7 @@ resource "aws_security_group" "load-balancer" {
 resource "aws_security_group" "ecs" {
   name        = "${terraform.workspace}_${var.project_name}_ecs_security_group"
   description = "Allows inbound access from the ALB only"
-  vpc_id      =  module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     "project" : var.project_name
@@ -68,7 +68,7 @@ resource "aws_security_group" "ecs" {
 resource "aws_security_group" "rds" {
   name        = "${terraform.workspace}_${var.project_name}_rds-security-group"
   description = "Allows inbound access from ECS only"
-  vpc_id      =  module.vpc.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     "project" : var.project_name
