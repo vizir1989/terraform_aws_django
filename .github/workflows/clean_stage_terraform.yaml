@@ -1,4 +1,4 @@
-name: "Terraform"
+name: "Clean Stage Terraform"
 
 on:
   workflow_dispatch:
