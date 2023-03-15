@@ -199,7 +199,7 @@ jobs:
       TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
       TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
       TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
-    if: ${{ always() && needs.terraform.aws_type != 'cheap' }}
+    if: needs.terraform.aws_type != 'cheap'
 
     steps:
       - name: Set type of AWS
