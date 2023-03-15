@@ -100,6 +100,7 @@ jobs:
       TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
       TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
       TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
+
     steps:
       - name: Set type of AWS
         run: |
