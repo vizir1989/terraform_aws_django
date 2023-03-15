@@ -222,7 +222,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: cd ./terraform && terraform init
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform init
 
       - name: Set Terraform Workspace
         id: workspace_main
