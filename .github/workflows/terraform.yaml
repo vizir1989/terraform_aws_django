@@ -101,6 +101,10 @@ jobs:
       TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
       TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
     steps:
+      - name: Set type of AWS
+        run: |
+          if [[ ${{ vars.AWS_TYPE }} == "cheap" ]]; then echo "TERRAFORM_DIR=./terraform_cheap" >> $GITHUB_ENV;  else echo "TERRAFORM_DIR=./terraform" >> $GITHUB_ENV; fi
+
       - name: Checkout
         uses: actions/checkout@v3.3.0
         with:
@@ -115,11 +119,11 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        run: cd ./terraform && terraform fmt -check
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform fmt -check
 
       - name: Terraform Init
         id: init
-        run: cd ./terraform && terraform init
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform init
 
       - name: Set Terraform Workspace
         id: workspace_main
@@ -139,15 +143,15 @@ jobs:
       - name: Create Terraform Workspace
         id: create_workspace
         continue-on-error: true
-        run: cd ./terraform && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }}
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }}
 
       - name: Select Terraform Workspace
         id: select_workspace
-        run: cd ./terraform && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
 
       - name: Terraform Validate
         id: validate
-        run: cd ./terraform && terraform validate -no-color
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform validate -no-color
 
       - name: Terraform Apply
         id: apply
@@ -155,7 +159,7 @@ jobs:
         env:
           TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
           TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
-        run: cd ./terraform && terraform apply -auto-approve -input=false
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform apply -auto-approve -input=false
 
       - name: Install python
         id: python
@@ -177,7 +181,10 @@ jobs:
           TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
           TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
         if: github.event_name == 'push'
-        run: cd ./terraform && terraform apply -auto-approve -input=false
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform apply -auto-approve -input=false
+
+    outputs:
+      aws_type: ${{ vars.AWS_TYPE }}
 
   clean:
     name: "Clean Terraform"
@@ -192,8 +199,12 @@ jobs:
       TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
       TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
       TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
-    if: ${{ always() }}
+    if: needs.terraform.outputs.aws_type != 'cheap'
+
     steps:
+      - name: Set type of AWS
+        run: |
+          if [[ ${{ vars.AWS_TYPE }} == "cheap" ]]; then echo "TERRAFORM_DIR=./terraform_cheap" >> $GITHUB_ENV;  else echo "TERRAFORM_DIR=./terraform" >> $GITHUB_ENV; fi
       - name: Checkout
         uses: actions/checkout@v3.3.0
         with:
@@ -212,7 +223,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: cd ./terraform && terraform init
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform init
 
       - name: Set Terraform Workspace
         id: workspace_main
@@ -232,12 +243,13 @@ jobs:
       - name: Create Terraform Workspace
         id: create_workspace
         continue-on-error: true
-        run: cd ./terraform && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }}
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }}
 
       - name: Select Terraform Workspace
         id: select_workspace
-        run: cd ./terraform && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
-      - name: Sleep for 45 minutes
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
+
+      - name: Sleep
         run: sleep ${{ vars.DELETION_DELAY }}
         shell: bash
 
@@ -245,7 +257,7 @@ jobs:
         env:
           TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
           TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
-        run: cd ./terraform && terraform destroy -auto-approve -input=false
+        run: cd ${{ env.TERRAFORM_DIR }} && terraform destroy -auto-approve -input=false
 
       - name: Delete aws secret
         run: aws secretsmanager delete-secret --secret-id ${{ env.TERRAFORM_WORKSPACE }}-${{ vars.PROJECT_NAME }}-${{ vars.AWS_SECRET_ID }} --force-delete-without-recovery --region ${{ vars.AWS_DEFAULT_REGION }}
