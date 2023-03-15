@@ -3,74 +3,75 @@ name: "Clean Dev Terraform"
 on:
   workflow_dispatch:
 
-clean:
-    name: "Clean Terraform"
-    runs-on: ubuntu-latest
-    needs: terraform
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-      TF_VAR_region: ${{ vars.AWS_DEFAULT_REGION }}
-      TF_VAR_certificate_arn: ${{ secrets.AWS_CERTIFICATE_ARN }}
-      TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
-      TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
-      TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
-    if: needs.terraform.outputs.aws_type != 'cheap'
+jobs:
+  clean:
+      name: "Clean Terraform"
+      runs-on: ubuntu-latest
+      needs: terraform
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+        TF_VAR_region: ${{ vars.AWS_DEFAULT_REGION }}
+        TF_VAR_certificate_arn: ${{ secrets.AWS_CERTIFICATE_ARN }}
+        TF_VAR_secret_id: ${{ vars.AWS_SECRET_ID }}
+        TF_VAR_project_name: ${{ vars.PROJECT_NAME }}
+        TF_VAR_hosted_zone: ${{ vars.HOSTED_ZONE }}
+      if: needs.terraform.outputs.aws_type != 'cheap'
 
-    steps:
-      - name: Set type of AWS
-        run: |
-          if [[ ${{ vars.AWS_TYPE }} == "cheap" ]]; then echo "TERRAFORM_DIR=./terraform_cheap" >> $GITHUB_ENV;  else echo "TERRAFORM_DIR=./terraform" >> $GITHUB_ENV; fi
-      - name: Checkout
-        uses: actions/checkout@v3.3.0
-        with:
-          token: ${{ secrets.TOKEN }}
+      steps:
+        - name: Set type of AWS
+          run: |
+            if [[ ${{ vars.AWS_TYPE }} == "cheap" ]]; then echo "TERRAFORM_DIR=./terraform_cheap" >> $GITHUB_ENV;  else echo "TERRAFORM_DIR=./terraform" >> $GITHUB_ENV; fi
+        - name: Checkout
+          uses: actions/checkout@v3.3.0
+          with:
+            token: ${{ secrets.TOKEN }}
 
-      - name: Install AWS CLI
-        id: install-aws-cli
-        uses: unfor19/install-aws-cli-action@master
+        - name: Install AWS CLI
+          id: install-aws-cli
+          uses: unfor19/install-aws-cli-action@master
 
-      - name: Create AWS_PUB_KEY
-        id: aws_pub_key
-        run: mkdir -p ~/.ssh/ && echo "${{ secrets.AWS_PUB_KEY }}" > ~/.ssh/aws.pub
+        - name: Create AWS_PUB_KEY
+          id: aws_pub_key
+          run: mkdir -p ~/.ssh/ && echo "${{ secrets.AWS_PUB_KEY }}" > ~/.ssh/aws.pub
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform Init
-        id: init
-        run: cd ${{ env.TERRAFORM_DIR }} && terraform init
+        - name: Terraform Init
+          id: init
+          run: cd ${{ env.TERRAFORM_DIR }} && terraform init
 
-      - name: Set Terraform Workspace
-        id: workspace_main
-        if: github.ref == 'refs/heads/main'
-        run: echo "TERRAFORM_WORKSPACE=prod" >> $GITHUB_ENV
+        - name: Set Terraform Workspace
+          id: workspace_main
+          if: github.ref == 'refs/heads/main'
+          run: echo "TERRAFORM_WORKSPACE=prod" >> $GITHUB_ENV
 
-      - name: Set Terraform Workspace
-        id: workspace_stage
-        if: github.ref == 'refs/heads/stage'
-        run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
+        - name: Set Terraform Workspace
+          id: workspace_stage
+          if: github.ref == 'refs/heads/stage'
+          run: echo "TERRAFORM_WORKSPACE=stage" >> $GITHUB_ENV
 
-      - name: Set Terraform Workspace
-        id: workspace_dev
-        if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
-        run: echo "TERRAFORM_WORKSPACE=dev" >> $GITHUB_ENV
+        - name: Set Terraform Workspace
+          id: workspace_dev
+          if: github.ref != 'refs/heads/stage' && github.ref != 'refs/heads/main'
+          run: echo "TERRAFORM_WORKSPACE=dev" >> $GITHUB_ENV
 
-      - name: Create Terraform Workspace
-        id: create_workspace
-        continue-on-error: true
-        run: cd ${{ env.TERRAFORM_DIR }} && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }}
+        - name: Create Terraform Workspace
+          id: create_workspace
+          continue-on-error: true
+          run: cd ${{ env.TERRAFORM_DIR }} && terraform workspace new ${{ env.TERRAFORM_WORKSPACE }}
 
-      - name: Select Terraform Workspace
-        id: select_workspace
-        run: cd ${{ env.TERRAFORM_DIR }} && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
+        - name: Select Terraform Workspace
+          id: select_workspace
+          run: cd ${{ env.TERRAFORM_DIR }} && terraform workspace select ${{ env.TERRAFORM_WORKSPACE }}
 
-      - name: Terraform delete
-        env:
-          TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
-          TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
-        run: cd ${{ env.TERRAFORM_DIR }} && terraform destroy -auto-approve -input=false
+        - name: Terraform delete
+          env:
+            TF_VAR_docker_image_url_django: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_django:${{ env.TERRAFORM_WORKSPACE }}
+            TF_VAR_docker_image_url_nginx: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_DEFAULT_REGION }}.amazonaws.com/${{ vars.PROJECT_NAME }}_nginx:${{ env.TERRAFORM_WORKSPACE }}
+          run: cd ${{ env.TERRAFORM_DIR }} && terraform destroy -auto-approve -input=false
 
-      - name: Delete aws secret
-        run: aws secretsmanager delete-secret --secret-id ${{ env.TERRAFORM_WORKSPACE }}-${{ vars.PROJECT_NAME }}-${{ vars.AWS_SECRET_ID }} --force-delete-without-recovery --region ${{ vars.AWS_DEFAULT_REGION }}
+        - name: Delete aws secret
+          run: aws secretsmanager delete-secret --secret-id ${{ env.TERRAFORM_WORKSPACE }}-${{ vars.PROJECT_NAME }}-${{ vars.AWS_SECRET_ID }} --force-delete-without-recovery --region ${{ vars.AWS_DEFAULT_REGION }}
