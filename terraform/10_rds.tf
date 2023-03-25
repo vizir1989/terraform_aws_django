@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "production" {
   name       = "${terraform.workspace}-${var.project_name}-main"
-  subnet_ids = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id]
+  subnet_ids = module.vpc.private_subnets
 
   tags = {
     "project" : var.project_name
