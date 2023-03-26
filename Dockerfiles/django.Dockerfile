@@ -43,3 +43,4 @@ RUN chmod +x ./scripts/lint.sh
 RUN ./scripts/lint.sh
 
 FROM base as dist-image
+CMD ./scripts/run_server.sh

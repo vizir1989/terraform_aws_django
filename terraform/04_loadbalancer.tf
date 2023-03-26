@@ -5,7 +5,8 @@ resource "aws_lb" "production" {
   load_balancer_type = "application"
   internal           = false
   security_groups    = [aws_security_group.load-balancer.id]
-  subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
+  subnets            = module.vpc.public_subnets
+  # subnets            = [aws_subnet.public-subnet-1.id, aws_subnet.public-subnet-2.id]
 
   tags = {
     "project" : var.project_name
@@ -24,7 +25,7 @@ resource "aws_alb_target_group" "default-target-group" {
   name     = "${terraform.workspace}-${var.project_name}-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.production-vpc.id
+  vpc_id   = module.vpc.vpc_id
 
   tags = {
     "project" : var.project_name

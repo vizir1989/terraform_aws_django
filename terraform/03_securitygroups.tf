@@ -2,7 +2,7 @@
 resource "aws_security_group" "load-balancer" {
   name        = "${terraform.workspace}_${var.project_name}_load_balancer_security_group"
   description = "Controls access to the ALB"
-  vpc_id      = aws_vpc.production-vpc.id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     "project" : var.project_name
@@ -35,7 +35,7 @@ resource "aws_security_group" "load-balancer" {
 resource "aws_security_group" "ecs" {
   name        = "${terraform.workspace}_${var.project_name}_ecs_security_group"
   description = "Allows inbound access from the ALB only"
-  vpc_id      = aws_vpc.production-vpc.id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     "project" : var.project_name
@@ -68,7 +68,7 @@ resource "aws_security_group" "ecs" {
 resource "aws_security_group" "rds" {
   name        = "${terraform.workspace}_${var.project_name}_rds-security-group"
   description = "Allows inbound access from ECS only"
-  vpc_id      = aws_vpc.production-vpc.id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     "project" : var.project_name
@@ -79,6 +79,33 @@ resource "aws_security_group" "rds" {
     protocol        = "tcp"
     from_port       = "5432"
     to_port         = "5432"
+    security_groups = [aws_security_group.ecs.id]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
+# ElastiCache Security Group (traffic ECS -> ElastiCache)
+resource "aws_security_group" "elasticache" {
+  name        = "${terraform.workspace}_${var.project_name}_elasticache-security-group"
+  description = "Allows inbound access from ECS only"
+  vpc_id      = module.vpc.vpc_id
+
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
+  }
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = "6379"
+    to_port         = "6379"
     security_groups = [aws_security_group.ecs.id]
   }
 

@@ -89,3 +89,30 @@ resource "aws_security_group" "rds" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+
+# ElastiCache Security Group (traffic ECS -> ElastiCache)
+resource "aws_security_group" "elasticache" {
+  name        = "${terraform.workspace}_${var.project_name}_elasticache-security-group"
+  description = "Allows inbound access from ECS only"
+  vpc_id      = module.vpc.vpc_id
+
+  tags = {
+    "project" : var.project_name
+    "type" : terraform.workspace
+  }
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = "6379"
+    to_port         = "6379"
+    security_groups = [aws_security_group.ecs.id]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}

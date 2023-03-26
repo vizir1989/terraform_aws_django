@@ -23,6 +23,7 @@ Stack: Python 3.10, Django 4.1, NGINX, PostgreSQL 15, AWS, Docker, Terraform, Gi
 - [Autoscaling](https://aws.amazon.com/ec2/autoscaling/)
 - [RDS](https://aws.amazon.com/rds/)
 - [Route 53](https://aws.amazon.com/route53/)
+- [ElastiCache](https://aws.amazon.com/elasticache/)
 
 ## Backend
 - [NGINX](https://www.nginx.com/)

@@ -58,6 +58,18 @@
       {
         "name": "AWS_STORAGE_BUCKET_NAME",
         "value": "${bucket_name}"
+      },
+      {
+        "name": "REDIS_HOST",
+        "value": "${elc_host}"
+      },
+      {
+        "name": "REDIS_PORT",
+        "value": "${elc_port}"
+      },
+      {
+        "name": "REDIS_DB",
+        "value": "${elc_db}"
       }
     ],
     "logConfiguration": {

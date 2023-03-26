@@ -21,6 +21,9 @@ data "template_file" "app" {
   template = file("templates/django_app.json.tpl")
 
   vars = {
+    elc_host                  = aws_elasticache_cluster.redis.cache_nodes.0.address
+    elc_port                  = aws_elasticache_cluster.redis.cache_nodes.0.port
+    elc_db                    = 0
     docker_image_url_django   = var.docker_image_url_django
     docker_image_url_nginx    = var.docker_image_url_nginx
     region                    = data.aws_region.current.name
