@@ -3,7 +3,7 @@
     "name": "${project_name}_django",
     "image": "${docker_image_url_django}",
     "essential": true,
-    "cpu": 10,
+    "cpu": 4,
     "memory": 512,
     "links": [],
     "portMappings": [
@@ -85,7 +85,7 @@
     "name": "${project_name}_nginx",
     "image": "${docker_image_url_nginx}",
     "essential": true,
-    "cpu": 10,
+    "cpu": 2,
     "memory": 128,
     "links": ["${project_name}_django"],
     "portMappings": [

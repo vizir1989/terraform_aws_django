@@ -76,7 +76,7 @@ variable "amis" {
   }
 }
 variable "instance_type" {
-  default = "t3.micro"
+  default = "t3.nano"
 }
 
 variable "docker_image_url_django" {
