@@ -6,5 +6,4 @@ resource "aws_autoscaling_group" "ecs-cluster" {
   health_check_type    = "EC2"
   launch_configuration = aws_launch_configuration.ecs.name
   vpc_zone_identifier  = module.vpc.private_subnets
-  #vpc_zone_identifier  = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id]
 }

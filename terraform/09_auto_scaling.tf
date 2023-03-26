@@ -5,5 +5,6 @@ resource "aws_autoscaling_group" "ecs-cluster" {
   desired_capacity     = terraform.workspace == "prod" ? var.autoscale_desired : 2
   health_check_type    = "EC2"
   launch_configuration = aws_launch_configuration.ecs.name
-  vpc_zone_identifier  = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id]
+  vpc_zone_identifier  = module.vpc.private_subnets
+  #vpc_zone_identifier  = [aws_subnet.private-subnet-1.id, aws_subnet.private-subnet-2.id]
 }

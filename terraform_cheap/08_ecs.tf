@@ -10,6 +10,7 @@ resource "aws_launch_configuration" "ecs" {
   name                        = "${terraform.workspace}-${var.project_name}-cluster"
   image_id                    = lookup(var.amis, var.region)
   instance_type               = var.instance_type
+  spot_price                  = "0.004"
   security_groups             = [aws_security_group.ecs.id]
   iam_instance_profile        = aws_iam_instance_profile.ecs.name
   key_name                    = aws_key_pair.production.key_name
@@ -21,6 +22,9 @@ data "template_file" "app" {
   template = file("templates/django_app.json.tpl")
 
   vars = {
+    elc_host                  = aws_elasticache_cluster.redis.cache_nodes.0.address
+    elc_port                  = aws_elasticache_cluster.redis.cache_nodes.0.port
+    elc_db                    = 0
     docker_image_url_django   = var.docker_image_url_django
     docker_image_url_nginx    = var.docker_image_url_nginx
     region                    = data.aws_region.current.name
