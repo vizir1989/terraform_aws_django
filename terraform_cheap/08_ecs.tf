@@ -10,7 +10,7 @@ resource "aws_launch_configuration" "ecs" {
   name                        = "${terraform.workspace}-${var.project_name}-cluster"
   image_id                    = lookup(var.amis, var.region)
   instance_type               = var.instance_type
-  spot_price                  = "0.004"
+  spot_price                  = "0.005"
   security_groups             = [aws_security_group.ecs.id]
   iam_instance_profile        = aws_iam_instance_profile.ecs.name
   key_name                    = aws_key_pair.production.key_name
